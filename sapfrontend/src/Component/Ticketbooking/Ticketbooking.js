@@ -5,13 +5,13 @@ import ReactLoading from "react-loading";
 import styles from "./Ticketbooking.module.css";
 
 const TicketForm = () => {
-  const { id, com, cshort } = useParams();
+  const { id } = useParams();
   const client_id = atob(id);
-  const company_name = atob(com);
-  const company_short_name = atob(cshort);
 
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [company_name, setCompany_name] = useState();
+  const [company_short_name, setCompany_short_name] = useState();
 
   const initialFormData = {
     subject: "",
@@ -25,17 +25,40 @@ const TicketForm = () => {
   const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5002/api/serve/${client_id}/services`)
-      .then((res) => {
-        const allSubdivisions = res.data.flatMap(
-          (service) => service.subdivisions
+    const fetchServices = async () => {
+      try {
+        const res = await axios.get(`
+          http://localhost:5002/api/serve/${client_id}/services
+        `);
+        const allSubdivisions = res.data.flatMap((service) =>
+          service.subdivisions.map((subdivision) => ({
+            ...subdivision,
+            service_name: service.service_name, // Add service_name to each subdivision
+          }))
         );
         setServices(allSubdivisions);
-      })
-      .catch((e) => {
-        alert("Server is down...");
-      });
+      } catch (e) {
+        console.log("Server is down...");
+      }
+    };
+
+    const fetchCompanyInfo = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5002/api/client/getCompany/${client_id}
+        `
+        );
+        console.log(res.data[0]);
+        const data = res.data[0];
+        setCompany_name(data.company);
+        setCompany_short_name(data.company_short_name);
+      } catch (e) {
+        console.log("Failed to fetch company information.");
+      }
+    };
+
+    fetchServices();
+    fetchCompanyInfo();
   }, [client_id]);
 
   const handleChange = (e) => {
@@ -70,12 +93,14 @@ const TicketForm = () => {
           withCredentials: true,
         }
       );
-      console.log("Ticket created successfully:", response.data);
+
+      // console.log("Ticket created successfully:", response.data);
 
       if (
         response.data.message === "Ticket created successfully and emails sent."
       ) {
         alert("Ticket Created Successfully. Check your mail");
+        window.location.reload();
       } else if (
         response.data.message ===
         "Ticket created, but failed to send email to account manager."
@@ -86,33 +111,44 @@ const TicketForm = () => {
         "Ticket created, but failed to send email to client."
       ) {
         alert("Ticket created, but failed to send email to client.");
+      } else if (response.data.message === "No email information found.") {
+        alert("No email information found.");
+      } else if (
+        response.data.message ===
+        "Invalid client_id. The client does not exist."
+      ) {
+        alert("Invalid client_id. The client does not exist.");
+      } else if (
+        response.data.message ===
+        "Invalid subdivision_id. The subdivision does not exist."
+      ) {
+        alert("Invalid subdivision_id. The subdivision does not exist.");
       }
 
       setFormData(initialFormData); // Reset form data
-      setLoading(false);
     } catch (error) {
       console.error("Error creating ticket:", error);
       if (error.response) {
         console.error("Server responded with:", error.response.data);
-        alert("No email information found.");
       }
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.totalbg}>
+    <div className={`styles.totalbg`}>
       <h1 className="text-center my-4">CREATE YOUR TICKET</h1>
       <div className="d-flex flex-column justify-content-center align-items-center px-5">
-        <div className={styles.shadowcard}>
+        <div className={`styles.shadowcard`}>
           {loading && (
-            <div className={styles.loadingOverlay}>
+            <div className={`styles.loadingOverlay`}>
               <ReactLoading type="spin" color="#000" height={30} width={30} />
             </div>
           )}
           <div className={`card p-3 ${styles.shadowcard}`}>
             <form onSubmit={handleSubmit}>
-              <div className={styles.formGroup}>
+              <div className={`styles.formGroup`}>
                 <label htmlFor="subject">Subject</label>
                 <input
                   type="text"
@@ -162,7 +198,7 @@ const TicketForm = () => {
                       key={subdivision.subdivision_id}
                       value={subdivision.subdivision_id}
                     >
-                      {subdivision.subdivision_name}
+                      {`${subdivision.service_name} - ${subdivision.subdivision_name}`}
                     </option>
                   ))}
                 </select>

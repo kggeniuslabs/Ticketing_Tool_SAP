@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faAddressCard,
   faBars,
   faHome,
   faMoneyBill,
@@ -71,7 +72,7 @@ const Amsidebar = () => {
           >
             <Nav className="ml-auto">
               <Nav.Link as={Link} to={`/manager/${id}`} className="text-light">
-                Ticket Summary
+                Dashboard
               </Nav.Link>
               <Nav.Link
                 as={Link}
@@ -79,6 +80,14 @@ const Amsidebar = () => {
                 className="text-light"
               >
                 Tickets
+              </Nav.Link>
+              <Nav.Link
+                as={Link}
+                to={`/manager/ticketraise/${id}`}
+                className="text-light text-decoration-none mx-3 my-3"
+              >
+                <FontAwesomeIcon icon={faAddressCard} className="me-2" />
+                Ticket Booking
               </Nav.Link>
               <Nav.Link
                 onClick={handleLogout}
@@ -109,7 +118,7 @@ const Amsidebar = () => {
               className="text-light text-decoration-none mx-3 my-2"
             >
               <FontAwesomeIcon icon={faRectangleList} className="me-2" />
-              TicketSummary
+              Dashboard
             </Nav.Link>
             <Nav.Link
               as={Link}
@@ -119,8 +128,17 @@ const Amsidebar = () => {
               <FontAwesomeIcon icon={faTicket} className="me-2" />
               Tickets
             </Nav.Link>
+            <Nav.Link
+              as={Link}
+              to={`/manager/ticketraise/${id}`}
+              className="text-light text-decoration-none mx-3 my-3"
+            >
+              <FontAwesomeIcon icon={faAddressCard} className="me-2" />
+              Ticket Booking
+            </Nav.Link>
 
-            <Nav.Link as={Link}
+            <Nav.Link
+              as={Link}
               onClick={handleLogout}
               to={`/`}
               className="text-light text-decoration-none mx-3 my-3"

@@ -55,7 +55,10 @@ export const addClientService = async (req, res) => {
 
 export const getServices = (req, res) => {
   const query = `
-    SELECT s.service_id, s.service_name, sd.subdivision_id, sd.am_id, sd.service_id AS subdivision_service_id, sd.description FROM services s JOIN subdivisions sd ON s.service_id = sd.service_id ORDER BY s.service_id;`;
+    SELECT s.service_id, s.service_name, sd.subdivision_id, sd.am_id, sd.service_id AS subdivision_service_id, sd.description, sd.subdivision_name 
+    FROM services s 
+    JOIN subdivisions sd ON s.service_id = sd.service_id 
+    ORDER BY s.service_id;`;
 
   db.query(query, (err, results) => {
     if (err) {
@@ -81,6 +84,7 @@ export const getServices = (req, res) => {
         am_id: row.am_id,
         service_id: row.subdivision_service_id,
         description: row.description,
+        subdivision_name: row.subdivision_name, // Add subdivision_name here
       });
     });
 
@@ -162,5 +166,22 @@ export const getAccountManagers = async (req, res) => {
   } catch (error) {
     console.error("Error fetching account managers:", error);
     res.status(500).send("Failed to fetch account managers.");
+  }
+};
+
+export const getAllServices = async (req, res) => {
+  const { am_id } = req.params;
+  try {
+    const sql = "select* from subdivisions where am_id = ?";
+    db.query(sql, [am_id], (err, result) => {
+      if (err) {
+        res.json({ error: err });
+      } else {
+        res.json(result);
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching subdivisions:", error);
+    res.status(500).json({ message: "Failed to fetch subdivisions." });
   }
 };

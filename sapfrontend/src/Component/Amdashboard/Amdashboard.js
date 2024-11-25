@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Amsidebar from "../Amsidebar/Amsidebar";
 import TicketSummary from "../Summary/Summary";
-import ClientRegister from "../Clientregistration/Clientregistration";
 import TicketsCount from "../Showtickets/Showtickets";
 import TicketShow from "../TicketShow/TicketShow";
 import AccountManagerTicketTrack from "../AmTicketTrack/AccountManagerTicketTrack";
+import AmTicketBooking from "../AmTicketBook/AmTicketBooking";
+import AmEmployeeTable from "./AmEmployeeTable";
+import AmTicketTable from "./AmTicketTable";
 
 export function Amdashboard() {
   return (
@@ -14,9 +16,7 @@ export function Amdashboard() {
           <div className="col-lg-2">
             <Amsidebar />
           </div>
-          <div className="col-lg-1">
-
-          </div>
+          <div className="col-lg-1"></div>
           <div className="col-lg-9">
             <TicketSummary />
           </div>
@@ -34,9 +34,7 @@ export function AmdTicketCount() {
           <div className="col-lg-2">
             <Amsidebar />
           </div>
-          <div className="col-lg-1">
-
-          </div>
+          <div className="col-lg-1"></div>
           <div className="col-lg-9">
             <TicketsCount />
           </div>
@@ -54,9 +52,7 @@ export function AmdTicketShow() {
           <div className="col-lg-2">
             <Amsidebar />
           </div>
-          <div className="col-lg-1">
-
-          </div>
+          <div className="col-lg-1"></div>
           <div className="col-lg-9">
             <TicketShow />
           </div>
@@ -74,9 +70,7 @@ export function AmdTicketTrack() {
           <div className="col-lg-2">
             <Amsidebar />
           </div>
-          <div className="col-lg-1">
-
-          </div>
+          <div className="col-lg-1"></div>
           <div className="col-lg-9">
             <AccountManagerTicketTrack />
           </div>
@@ -86,9 +80,56 @@ export function AmdTicketTrack() {
   );
 }
 
+export function AmdTicketRaising() {
+  return (
+    <>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-lg-2">
+            <Amsidebar />
+          </div>
+          <div className="col-lg-1"></div>
+          <div className="col-lg-9">
+            <AmTicketBooking />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
+export function AmdEmployeeDetail() {
+  return (
+    <>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-lg-2">
+            <Amsidebar />
+          </div>
+          <div className="col-lg-1"></div>
+          <div className="col-lg-9">
+            <AmEmployeeTable />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
 
-
-
-
-
+export function AmdTicketDetail() {
+  return (
+    <>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-lg-2">
+            <Amsidebar />
+          </div>
+          <div className="col-lg-1"></div>
+          <div className="col-lg-9">
+            <AmTicketTable />
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -1,10 +1,17 @@
 // routes/ticket.routes.mjs
 import { Router } from "express";
 import {
+  AccountMangerTicketRaising,
+  AmBasedEmployeeDetails,
+  AmBasedEmployeesCount,
+  AmBasedTicketDetails,
+  ApproveConsultantSubmission,
   assignTicket,
+  consultantUpdateTheTicketStatus,
   createTicket,
   getAccountManagerTicketDetails,
   getAccountManagerTrackTickets,
+  getClientTicketStatus,
   getCompanyTicketCounts,
   submitTicketChanges,
 } from "../controllers/ticket.controller.mjs";
@@ -20,7 +27,6 @@ router.post(
 );
 
 // Account Manager Routes
-router.get("/count/:am_id", getCompanyTicketCounts);
 router.get(
   "/getAMTicketDetail/:am_id/:company_name",
   getAccountManagerTicketDetails
@@ -34,4 +40,17 @@ router.get("/track/:am_id/:ticket_id", getAccountManagerTrackTickets);
 
 // Account manager send if any changes need in the submission
 router.post('/submitChanges',submitTicketChanges)
+router.get("/status/:id", getClientTicketStatus);
+router.post('/statusupdate',consultantUpdateTheTicketStatus)
+router.post('/approve',ApproveConsultantSubmission)
+
+// Account manager ticket raising
+router.post('/amraiseticket/:am_id', upload.single('amscreenshot'), AccountMangerTicketRaising);
+
+// Account Manager Dashboard
+router.get("/count/:am_id", getCompanyTicketCounts);
+router.get('/empcount/:id',AmBasedEmployeesCount)
+router.get('/empdetail/:id',AmBasedEmployeeDetails)
+router.get('/amtickets/:id',AmBasedTicketDetails)
+
 export default router;
